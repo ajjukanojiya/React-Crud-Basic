@@ -1,0 +1,688 @@
+JSX ke andar jab bhi JavaScript likhni ho, to {} use karte hain.
+
+App.jsx = routing ka main control room
+
+
+------React me Lifecycle ka matlab hota hai:--------
+
+Component ki life ke alag-alag stages — jab component create hota hai, update hota hai aur remove hota hai.
+
+Simple language me:
+
+Component ki life ke 3 phase hote hain
+
+
+1️⃣ Mounting
+2️⃣ Updating
+3️⃣ Unmounting
+
+
+
+
+Mount → jab component first time render ho
+Update → jab state ya props change ho
+Unmount → jab component screen se remove ho
+
+
+
+✅ 1 line trick (yaad rakhne ke liye)
+
+Mount = first render
+Update = re-render
+Unmount = remove
+
+
+
+
+---------------Easy Trick (Remember)-----------------
+State → useState  ,use Reducer 
+Effect → useEffect
+DOM → useRef
+Performance → useMemo, useCallback   
+Global data → useContext
+
+
+-------------------State Hooks (State Manage) --------------------------------- 
+ 1)useState
+
+const [count, setCount] = useState(0);
+
+Use: counter, form input, toggle
+    
+2)useReducer
+
+जब state logic ज्यादा complex हो जाए, तब useState की जगह useReducer use करते हैं
+
+complex state logic के लिए
+
+const [state, dispatch] = useReducer(reducer, initialState);
+
+Use: multiple state changes
+
+-------------- Side Effect Hook-------------------------
+1)useEffect
+API call, event listener, DOM update
+
+useEffect(()=>{
+ console.log("Component mounted");
+},[])
+
+--------------------Performance Optimization Hooks------------------------
+1)useMemo
+expensive calculation को cache करता है
+
+const value = useMemo(()=>sum(a,b),[a,b])
+
+Use: heavy calculations
+
+
+2)useCallback
+
+function को memoize करता है
+
+const handleClick = useCallback(()=>{
+ console.log("clicked")
+},[])
+
+
+Use: child component re-render रोकने के लिए
+
+
+-----React.memo performance optimization के लिए ही use होता है, लेकिन यह hook नहीं है।
+
+यह Higher Order Component (HOC) है।
+
+React.memo component को unnecessary re-render होने से रोकता है।
+
+-----Pehle samjho problem kya hai-----
+
+React me jab parent component re-render hota hai, to by default uske saare child components bhi re-render ho jate hain, chahe unke props change hue ho ya nahi.
+
+React.memo kya karta hai
+
+React.memo component ko wrap karke React ko bolta hai:
+
+"Agar props change nahi hue, to is component ko dobara render mat karo."
+
+Internally kaise kaam karta hai
+
+React.memo previous props aur new props ko compare karta hai.
+   prevProps === nextProps
+
+Isko shallow comparison bolte hain.
+
+👉 अगर props change नहीं हुए तो component re-render नहीं होगा।
+    const Child = React.memo((props) => {
+ 	 console.log("Child Rendered");
+		  return <h1>{props.name}</h1>;
+	});
+
+
+
+example 
+
+const Child = React.memo(({ name }) => {
+  console.log("Child Render");
+  return <h1>{name}</h1>;
+});
+
+function Parent() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>+</button>
+      <Child name="Rahul" />
+    </>
+  );
+}
+
+
+
+HOC क्या होता है
+
+HOC (Higher Order Component) एक function होता है जो किसी component को लेता है और नया component return करता है।  
+
+यह concept आता है React में।Component को लेता है
+        │
+        ▼
+Extra Logic add करता है
+        │
+        ▼
+New Component return करता है
+
+--------------------Reference Hooks-------------------------
+1)useRef
+
+ DOM access या value store
+
+const inputRef = useRef(null)
+
+inputRef.current.focus()
+
+-----------------------Context Hook-----------------------
+
+useContext
+
+global data access
+
+const theme = useContext(ThemeContext)
+
+
+
+-------------------basic quation for rember--------------------------------
+
+<Child onClick={handleClick} /> ka matlab hai parent component ek function child component ko prop ke through pass kar raha hai taaki child us function ko trigger kar sake.
+
+Parent = Boss
+
+Child = Worker
+
+Boss worker ko bolta hai:
+
+"Jab button click ho to ye kaam karna"
+
+
+Worker ko instruction diya gaya function ke form me
+
+
+--------Children prop (very important)-----------------
+1)
+Component ke opening aur closing tag ke beech jo bhi content hota hai usse React children prop me store karta hai.
+
+
+Parent
+
+<Child>
+   Hello World
+</Child>
+
+React internally
+
+Child({
+  children: "Hello World"
+})
+
+
+exmple se samjte hina 
+
+function Parent() {
+  return (
+    <Child>
+      <h1>Hello</h1>
+    </Child>
+  );
+}
+
+Yaha tumne Child ke andar likha:
+
+<h1>Hello</h1>
+
+React internally ise aise samajhta hai:
+<Child children={<h1>Hello</h1>} />
+
+
+Child component me kaise use hota hai
+function Child(props) {
+  return <div>{props.children}</div>;
+}
+
+
+
+Parent
+   ↓
+<Child>
+   <h1>Hello</h1>
+</Child>
+
+React convert karta hai
+
+<Child children={<h1>Hello</h1>} />
+
+
+
+
+2)Function prop (bahut important)
+
+Parent function child ko deta hai.
+
+function Parent() {
+
+  const sayHello = () => {
+    alert("Hello");
+  };
+
+  return <Child greet={sayHello} />;
+}
+
+function Child({ greet }) {
+  return <button onClick={greet}>Click</button>;
+}
+
+<Child onClick={handleClick} />
+➡️ function prop pass ho raha hai
+
+
+
+React.memo → props compare karta hai
+useCallback → function same rakhta hai
+
+
+--------------Componant--------------------
+
+React Component kaise pehchane
+
+Agar function:
+
+Capital letter se start ho
+
+JSX return kare
+
+To wo React Component hota hai.
+
+Example:
+
+function Header() {
+  return <h1>Hello</h1>;
+}
+
+
+Yaha:
+
+Header → Capital letter
+return → JSX
+
+
+Isliye ye React component hai.
+
+Use:
+
+<Header />
+
+
+
+2️⃣ Normal JavaScript Function
+
+Agar function:
+
+JSX return nahi karta
+
+Sirf logic karta hai
+
+To wo normal function hai.
+
+Example:
+
+function add(a, b) {
+  return a + b;
+}
+
+
+Ye React component nahi hai.
+
+
+
+
+
+----Side Effect------
+UI render ke bahar jo bhi extra kaam ho use bolte hain  Side effect
+
+Side effects wo operations hote hain jo component ke render ke baad perform hote hain aur UI rendering ka direct part nahi hote.
+
+Inhe React me useEffect hook se handle kiya jata hai.
+
+useEffect(() => {})         → har render
+useEffect(() => {}, [])     → first render
+useEffect(() => {}, [x])    → jab x change ho
+
+
+-----Context API क्या है-------
+
+React में Context API एक system है जिससे हम global data share कर सकते हैं।
+
+इसमें 3 main चीजें होती हैं:
+
+createContext
+
+Provider
+
+useContext
+
+इन तीनों को मिलाकर Context API कहते हैं।
+
+useContext और Context API एक ही चीज नहीं हैं, बल्कि useContext Context API का हिस्सा है।
+
+
+2️⃣ useContext क्या है
+
+useContext एक hook है जो context से data लेने के लिए use होता है।
+
+मतलब:
+
+Context API → पूरा system
+
+useContext → उस system से data access करने का hook
+
+3️⃣ Simple flow
+createContext  → context बनाना
+Provider       → data देना
+useContext     → data लेना
+
+
+
+import { createContext, useContext } from "react";
+
+const UserContext = createContext();
+
+function App() {
+  return (
+    <UserContext.Provider value="Rahul">
+      <Child />
+    </UserContext.Provider>
+  );
+}
+
+function Child() {
+  const user = useContext(UserContext);
+  return <h1>{user}</h1>;
+}
+
+jo bhi componat provide r kander honge sb jagh access ho jynga ye data 
+
+
+
+-------React Router – BASIC (MOST IMPORTANT)------------
+🔹 React Router kya karta hai?
+
+👉 Page change bina reload ke
+Jaise:
+
+/login
+/home
+/about
+
+npm install react-router-dom
+
+BrowserRouter → wrapper  routing enable karta hai
+Routes → saare routes  (container hota hai)      ye dcide karta hian kon sa kon se compo
+Route → ek page
+
+
+
+------PART 1: Import karte time { } kab use karte hain?--------
+🔥 Rule yaad rakho (MOST IMPORTANT)
+✅ { } TAB use hota hai jab
+
+👉 Named export ho
+
+❌ { } TAB nahi lagta jab
+
+👉 Default export ho
+
+1️⃣ Default Export (NO { })
+
+  export default App;
+
+---Named Export ( { } ZAROORI )----
+
+export const Home = () => {};
+export const Login = () => {};
+
+
+
+One-line yaad rakhne ka trick
+
+Default = direct import
+Named = { } ke andar import
+
+🔁 Ek hi file ka mixed example
+Export file
+export default App;
+export const Header = () => {};
+export const Footer = () => {};
+Import file
+import App, { Header, Footer } from "./App";
+
+✔ Bilkul valid
+✔ Real projects me aisa hi hota hai
+
+
+------PART 2: Function parameter me { } kyu use karte hain?---------
+
+👉 Ye Destructuring hota hai
+👉 Props ko direct nikaalne ke liye
+
+Without { } (Normal)
+function User(props) {
+  return <h1>{props.name}</h1>;
+}
+
+
+2️⃣ With { } (Destructuring)
+function User({ name }) {
+  return <h1>{name}</h1>;
+}
+
+Multiple props destructuring
+function User({ name, age }) {
+  return <p>{name} - {age}</p>;
+}
+
+
+
+----Brackets ka confusion clear kar do (SUPER IMPORTANT)--------------
+Bracket	Kya hai	Kab use
+{ }	Object destructuring	props, named import
+[ ]	Array destructuring	useState
+( )	Function call	function()
+< >	JSX	UI
+
+
+
+
+--------react-router-dom ka matlab:--------------
+Ye React ki library hai jo routing enable karne ke liye use hoti hai.
+Routing = URL ke hisaab se alag components dikhaana bina page reload kiye (SPA behavior).
+2️⃣ BrowserRouter ka use:
+<BrowserRouter> ek wrapper component hai jo app ke routing system ko activate karta hai.
+Iske andar hum routes aur navigation links define karte hain.
+Ye browser ka history object use karta hai URL ke changes track karne ke liye.
+
+
+Routes ka use kyu karte hain?
+
+👉 Routes ek container + decision maker hai
+
+Ye decide karta hai:
+
+Current URL ke hisaab se kaunsa Route (component) render hoga
+
+3️⃣ Routes aur Route ka use:
+<Routes>: Saare routes ko ek jagah organize karta hai.
+
+
+Routes ka use isliye hota hai:
+
+URL ke hisaab se component decide karne ke liye
+
+👉 Agar use nahi karoge:
+
+Routing system kaam nahi karega ❌
+Components switch nahi honge ❌
+App SPA behave nahi karegi ❌
+
+
+<Route>: Ek specific URL path ko ek particular component se link karta hai.
+
+
+
+
+Simple analogy:
+react-router-dom → Routing ki toolkit
+BrowserRouter → Routing engine ko activate karta hai
+Routes → Route map banata hai
+Route → Ek specific URL ko ek component se map karta hai
+Link → User ko URL change karne ka button
+
+
+----------Link, NavLink , useNavigate ------
+
+
+Link React me bilkul <a> (anchor tag) jaisa hi hai… BUT ek important difference ke sath
+
+----Link page change karta hai,
+----NavLink page change + active link highlight karta hai
+
+
+--------------------------------  body and object return explain      -------------------------------------
+
+setFormData({
+  ...formData,
+  [name]: value
+});
+
+
+setFormData(prevData => ({
+  ...prevData,
+  [name]: value
+}));
+
+सोचो:
+
+पहला तरीका = पुरानी फोटो देखकर update करना 📸
+दूसरा तरीका = live camera देखकर update करना 🎥
+
+👉 obvious है कौन सही होगा 😄
+function test(prevData) {
+  return {
+    name: "Ravi"
+  };
+}
+
+"React ko bolo — mujhe latest state de (prev),
+main uska copy banaunga,
+aur sirf ek field update karke naya state return kar dunga"
+
+const test = (prevData) => ({
+  name: "Ravi"
+});
+
+
+
+{} = object return कर रहे हो
+() = React/JS को बताते हैं कि ये object है, function body नहीं
+
+
+
+prevData => ({
+  name: "Ravi"
+})
+
+👉 JS समझेगा:
+
+ये object return हो रहा है ✅
+
+
+------------body: JSON.stringify(formData)-------------------------
+
+JavaScript object को JSON string में convert करना
+
+const formData = {
+  name: "Ravi",
+  email: "ravi@gmail.com"
+};
+
+
+JSON.stringify के बाद
+'{"name":"Ravi","email":"ravi@gmail.com"}'
+
+सही concept:
+Network (HTTP request) में data raw JS object में नहीं भेज सकते
+Data को standard format में भेजना पड़ता है
+सबसे common format = JSON (string form)
+
+
+JavaScript Object     ----  key mian quotes  optionan hote hian 
+
+const data = {
+  name: "Ravi",
+  age: 20
+};
+पहचान:
+quotes optional (keys पर)
+data type = object
+directly use कर सकते हो
+
+👉 ये object है
+
+------typeof data----
+
+2. JSON (string) --------keys हमेशा double quotes में------           
+       
+const data = '{"name":"Ravi","age":20}';
+पहचान:
+पूरा data " " या ' ' के अंदर है
+keys हमेशा double quotes में
+ये string है
+
+👉 ये JSON string है
+
+
+
+----------Conditional Rendering = condition के हिसाब से UI दिखाना या छुपाना ----------------------------
+
+🔹 1. Simple definition
+
+जब हम किसी condition (if/true/false) के basis पर component या UI दिखाते हैं → उसे Conditional Rendering कहते हैं
+
+🔹 2. Real-life example 😄
+
+👉 अगर user login है → Dashboard दिखाओ
+👉 नहीं है → Login page दिखाओ
+
+🔹 3. सबसे basic example
+const isLoggedIn = true;
+
+return (
+  <div>
+    {isLoggedIn ? <h1>Welcome</h1> : <h1>Please Login</h1>}
+  </div>
+);
+🔹 4. React में use होने वाले main तरीके
+✅ 1. Ternary Operator (सबसे common 🔥)
+{showModal ? <p>Modal Open</p> : null}
+
+👉 अगर showModal = true → दिखेगा
+👉 false → कुछ नहीं
+
+✅ 2. AND operator (&&)
+{showModal && <p>Modal Open</p>}
+
+👉 true → दिखेगा
+👉 false → कुछ नहीं
+
+👉 यही तुमने use किया था 😄
+
+{image && <img src={URL.createObjectURL(image)} />}
+✅ 3. if-else (function के अंदर)
+if (!isOpen) return null;
+
+
+
+------------URL.createObjectURL()-------------
+
+URL.createObjectURL() एक browser function है
+जो file (image/video) को temporary URL में convert करता है
+   ----erc mian direct object nhi chal sakta hian ise live convert karke temporary  url banta hian browser 
+<img src={URL.createObjectURL(image)} />
+blob:http://localhost:3000/abcd-1234
+const url = URL.createObjectURL(image);
+
+
+-----1. React Hook Form (MUST LEARN)--------------------
+
+👉 ये replace करेगा:
+
+useState ❌
+handleChange ❌
+manual errors ❌
