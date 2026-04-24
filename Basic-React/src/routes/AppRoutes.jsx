@@ -3,17 +3,22 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';  
 import Register2 from '../pages/Register2'; 
-
+import Practical from '../pages/Practical';
+import PerfomanceOptimization from '../pages/PerfomanceOptimization';
+import MainLayout from '../Layout/MainLayout';  
 
 
 function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/register2" element={<Register2 />} />
+         <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="register2" element={<Register2 />} />
+          <Route path="practical" element={<Practical />} />
+        </Route>
       </Routes>
     </Router>
   );

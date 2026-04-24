@@ -686,3 +686,71 @@ const url = URL.createObjectURL(image);
 useState ❌
 handleChange ❌
 manual errors ❌
+
+
+
+------|| vs ?? (easy samajh)---------
+
+let val = 0 || 10;
+console.log(val); // 10
+0 falsy hai → isliye 10 le liya
+
+  
+Falsy values:  false, 0, "", null, undefined, NaN    ye false vaue hain jise  || oprater cheak akrta hain agr hian mite hian to use badh wali  valuie leta hian
+
+|| → falsy check
+?? → null/undefined check
+
+
+------- Tricky Output Questions--------------------
+Coercion kya hota hai?
+
+👉 Type conversion automatically (khud se)
+JavaScript jab ek type ko doosre type me convert kar deta hai → use coercion bolte hain
+
+
+
+-----Easy trick:-------
++ with string → concatenation
+👉 - * / → number conversion
+👉 == → type change
+👉 === → no type change
+
++ → string mila = concatenation
+- * / → number conversion
+true → 1
+false → 0
+null → 0
+undefined → NaN
+[] → ""
+{} → object
+
+Jab tak string nahi aati → normal addition
+Jahan string aa gayi → uske baad sab string ban jata hai
+
+“Jab JavaScript khud se data type change kare, usko coercion kehte hain
+
+
+"5" - 2   =3
+
+true + true   =2    (true=1)
+
+false + 1   =1  (false=0)
+
+[] + []   =  ""   (empty string ban jata ha);
+
+[] + {}   =  "[object Object]" ;
+
+{} + []  =  0    {} → empty block treat hota hai    ,+ [] → 0
+
+null + 1  =   1         (null=0 mens null 0 ban jata hain)
+
+undefined + 1   = nan
+
+"10" + true   ="10true"
+
+ "10" - true =9
+
+[] + 1 = "1"    ([] "" stign ban jata hian)
+
+
