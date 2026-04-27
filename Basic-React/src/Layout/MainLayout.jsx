@@ -2,14 +2,15 @@ import React from "react";
 
 import Navar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import { Outlet } from "react-router-dom";
 
-const MainLayout=({children})=>{
+const MainLayout=()=>{
 
     return( 
         <>
         <Navar/>
         <Sidebar/>
-        {children}
+        <Outlet/>
         </>
     )
 }

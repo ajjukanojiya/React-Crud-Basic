@@ -18,6 +18,7 @@ function AppRoutes() {
           <Route path="register" element={<Register />} />
           <Route path="register2" element={<Register2 />} />
           <Route path="practical" element={<Practical />} />
+          <Route path="perfrom" element={<PerfomanceOptimization />} />
         </Route>
       </Routes>
     </Router>

@@ -1,20 +1,48 @@
 import React from "react";
 
+
+
+
+const Child=React.memo(({ onClick }) => {
+
+  console.log("Child component rendered");   
+  return (
+    <div>
+      <h2>Child Component</h2>
+      <button onClick={onClick}>Click Me</button>
+    </div>
+  );
+  
+})
+
 function PerfomanceOptimization() {
 
 
-    const childComponant=(data)=>{
-        console.log('Child Rerendered');
-        return (<>
-        {  data.map((item) => (<p key={item}>{item}</p>))}
-        </>)
-    }
-  return (
-    <div>
-      <h1>Performance Optimization</h1>
-      <p>Performance optimization in React involves techniques to improve the speed and efficiency of React applications. This can include memoization, code splitting, lazy loading, and optimizing rendering.</p>
+  const [count ,setCount] = React.useState(0);
+
+
+  const handleClick =React.useCallback(() => {
+    console.log("Button clicked");
+  }, [count]);
+
+  //   const handleClick =() => {
+  //   console.log("Button clicked");
+  // };
+
+
+  return (   
+     <div>
+      <h1>Perfomance Optimization</h1>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+     
+     <Child onClick={handleClick} />
+     {/* <Child  /> */}
+
     </div>
   );
+
+
 }
 
 export default PerfomanceOptimization;
