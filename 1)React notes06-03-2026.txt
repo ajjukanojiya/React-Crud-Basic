@@ -754,3 +754,15 @@ undefined + 1   = nan
 [] + 1 = "1"    ([] "" stign ban jata hian)
 
 
+
+----note -----
+
+Function bhi object hota hai
+Wo memory me ek object ki tarah store hota hai
+
+javaScript me objects & arrays value se nahi, reference se compare hote hain
+
+Dono same dikh rahe hain, but alag jagah stored hain
+
+
+
